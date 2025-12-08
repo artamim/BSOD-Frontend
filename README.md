@@ -16,26 +16,40 @@ After launching an EC2 instance and ssh into the instance:
 
 ##### 1. Install git and Node
 
+```bash
 sudo dnf update -y
 sudo dnf install -y nodejs git
 curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
 sudo dnf install -y nodejs
+```
 
 ##### 2. Install dependencies
+
+```bash
 git clone https://github.com/artamim/BSOD-Frontend.git
 cd ~/BSOD-Frontend
 rm -rf node_modules .next   # if previous files exists
 npm ci                      # now it will succeed without the engine warning
 npm run build               # this will now work perfectly
+```
 
 ##### 3. Install PM2
+
+```bash
 sudo npm install -g pm2
 sudo pm2 start npm --name "next-app" -- start -- -p 80
+```
 
 ##### 4. Make it survive reboots
+
+```bash
 sudo pm2 startup systemd -u ec2-user --hp /home/ec2-user
 sudo pm2 save
+```
 
 ##### 5. Check
+
+```bash
 pm2 status
 pm2 logs next-app
+```
