@@ -16,21 +16,30 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+For launching it in aws:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+##### 1. Install git and Node
 
-## Learn More
+sudo dnf update -y
+sudo dnf install -y nodejs git
+curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
+sudo dnf install -y nodejs
 
-To learn more about Next.js, take a look at the following resources:
+##### 2. Install dependencies
+git clone https://github.com/artamim/BSOD-Frontend.git
+cd ~/BSOD-Frontend
+rm -rf node_modules .next   # if previous files exists
+npm ci                      # now it will succeed without the engine warning
+npm run build               # this will now work perfectly
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+##### 3. Install PM2
+sudo npm install -g pm2
+sudo pm2 start npm --name "next-app" -- start -- -p 80
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+##### 4. Make it survive reboots
+sudo pm2 startup systemd -u ec2-user --hp /home/ec2-user
+sudo pm2 save
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+##### 5. Check
+pm2 status
+pm2 logs next-app
