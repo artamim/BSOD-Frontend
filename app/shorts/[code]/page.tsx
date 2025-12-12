@@ -1,6 +1,16 @@
-// app/shorts/[code]/page.js
-export default async function PrankRedirect({ params }) {
-  const { code } = await params;
+// app/shorts/[code]/page.js  ← Keep as .js, no TS needed
+
+// REQUIRED: Named function (not arrow) + async for Next.js 16 static export
+export async function generateStaticParams() {
+  return []
+}
+
+// REQUIRED: Block unknown codes (404 for /shorts/unknowncode)
+export const dynamicParams = false
+
+// Your page component – 100% unchanged from what you had
+export default function PrankRedirect({ params }) {
+  const { code } = params
 
   return (
     <div className="bsod">
@@ -55,5 +65,5 @@ export default async function PrankRedirect({ params }) {
         }}
       />
     </div>
-  );
+  )
 }

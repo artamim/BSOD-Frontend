@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "export": "next export",
+    "deploy": "next build && next export",
+    "start": "next dev",
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "16.0.5",
