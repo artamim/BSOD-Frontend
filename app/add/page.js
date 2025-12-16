@@ -3,6 +3,7 @@
 "use client";
 
 import { useState } from "react";
+import { shortenUrl } from "./actions";  // ← Import directly
 
 export default function AddUrlPage() {
   const [url1, setUrl1] = useState("");
@@ -10,45 +11,31 @@ export default function AddUrlPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!url1.trim()) return;
-
+  async function handleAction(formData) {
     setLoading(true);
     setError("");
     setShortUrl("");
 
-    try {
-      const res = await fetch("http://localhost:8000/urls", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url1: url1.trim() }),
-      });
+    const result = await shortenUrl(formData);
 
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Error ${res.status}: ${text}`);
-      }
-
-      const data = await res.json();
-      setShortUrl(data.url2);  // this is your short link
-      setUrl1("");             // clear the input
-    } catch (err) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setShortUrl(result.url2);
+      setUrl1("");  // clear input on success
     }
-  };
+
+    setLoading(false);
+  }
 
   return (
     <div style={{ padding: "2rem", fontFamily: "system-ui, sans-serif" }}>
-      <h1>Shorten Your URL</h1>
+      <h1>Create BSOD Prank Link 😈</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form action={handleAction}>
         <input
           type="url"
+          name="url1"
           placeholder="https://example.com/very/long/url..."
           value={url1}
           onChange={(e) => setUrl1(e.target.value)}
@@ -90,10 +77,10 @@ export default function AddUrlPage() {
           <button
             onClick={() => navigator.clipboard.writeText(shortUrl)}
             style={{
-            padding: "0.75rem 1.5rem",
-            fontSize: "1rem",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
+              padding: "0.75rem 1.5rem",
+              fontSize: "1rem",
+              cursor: loading ? "not-allowed" : "pointer",
+            }}
           >
             Copy to clipboard
           </button>

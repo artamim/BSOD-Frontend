@@ -26,7 +26,7 @@ export default async function PrankRedirect({ params }) {
               const progressEl = document.getElementById('progress');
               if (!progressEl) return;
 
-              fetch("http://localhost:8000/urls/" + code)
+              fetch("/api/shorts/" + code)
                 .then(res => {
                   if (!res.ok) throw new Error("Not found");
                   return res.json();

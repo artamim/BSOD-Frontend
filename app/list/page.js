@@ -8,7 +8,7 @@ export default function ListPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/list")
+    fetch("/api/list")
       .then((res) => res.json())
       .then((data) => {
         setLinks(data);
