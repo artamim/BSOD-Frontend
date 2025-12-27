@@ -16,7 +16,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::364420385429:role/BSODAutoScalingRoles
+          role-to-assume: arn:aws:iam::364420385429:role/MyGithubRoles
           aws-region: ap-south-1
 
       - name: Start Instance Refresh

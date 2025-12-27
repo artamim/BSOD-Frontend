@@ -7,12 +7,11 @@ import './styles.scss';
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/add', label: 'Add' },
   { href: '/list', label: 'List' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
-
+//{ href: '/add', label: 'Add' },
 export default function RootLayout({ children }) {
     const pathname = usePathname();
     const isShortsPage = pathname.startsWith('/shorts/');
