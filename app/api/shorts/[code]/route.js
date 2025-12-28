@@ -7,7 +7,6 @@ const prisma = globalForPrisma.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 export async function GET(request, { params }) {
-  // ← THIS LINE FIXES EVERYTHING
   const { code } = await params;
 
   if (!code || code.length !== 10) {
@@ -18,11 +17,12 @@ export async function GET(request, { params }) {
   }
 
   try {
-    // Exactly how your old FastAPI did it
-    const fullShortUrl = `http://localhost:3000/shorts/${code}`;
-
     const pair = await prisma.url_pairs.findFirst({
-      where: { url2: fullShortUrl },
+      where: {
+        url2: {
+          endsWith: `/shorts/${code}`,
+        },
+      },
     });
 
     if (!pair) {
@@ -35,7 +35,6 @@ export async function GET(request, { params }) {
     return new Response(
       JSON.stringify({
         url1: pair.url1,
-        url2: pair.url2,
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
