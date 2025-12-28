@@ -1,9 +1,10 @@
-// app/add/actions.js   ← Server Action file
+// app/add/actions.js
 
 "use server";
 
 import { PrismaClient } from '@prisma/client';
 import { randomBytes } from 'crypto';
+import { headers } from 'next/headers';  // ← Add this import
 
 const globalForPrisma = globalThis;
 const prisma = globalForPrisma.prisma || new PrismaClient();
@@ -20,13 +21,24 @@ export async function shortenUrl(formData) {
     return { error: 'Please enter a valid URL starting with http:// or https://' };
   }
 
+  // ← Dynamically build the base URL from request headers
+  const headersList = await headers();
+  const protocol = headersList.get('x-forwarded-proto') || 'http';  // https behind ALB with HTTPS listener
+  const host = headersList.get('x-forwarded-host') || headersList.get('host') || 'localhost:3000';
+  const baseUrl = `${protocol}://${host}`;
+
+  // Fallback for local dev (optional)
+  // const baseUrl = process.env.NODE_ENV === 'production' 
+  //   ? `${protocol}://${host}`
+  //   : 'http://localhost:3000';
+
   try {
     let code;
     let fullShortUrl;
 
     do {
       code = generateShortCode();
-      fullShortUrl = `http://localhost:3000/shorts/${code}`;
+      fullShortUrl = `${baseUrl}/shorts/${code}`;
     } while (
       await prisma.url_pairs.findFirst({
         where: { url2: fullShortUrl },
