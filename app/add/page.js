@@ -74,6 +74,7 @@ export default function AddUrlPage() {
         {shortUrl}
       </a>
     </p>
+    {/*
     <button
       onClick={async () => {
         try {
@@ -92,6 +93,7 @@ export default function AddUrlPage() {
     >
       Copy to clipboard
     </button>
+    */}
   </div>
 )}
     </div>
