@@ -87,11 +87,7 @@ export default function AddUrlPage() {
       style={{
         padding: "0.75rem 1.5rem",
         fontSize: "1rem",
-        cursor: "pointer",
-        backgroundColor: "#0066ff",
-        color: "white",
-        border: "none",
-        borderRadius: "4px",
+        cursor: "pointer"
       }}
     >
       Copy to clipboard
