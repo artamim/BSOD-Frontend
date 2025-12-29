@@ -62,30 +62,42 @@ export default function AddUrlPage() {
       )}
 
       {shortUrl && (
-        <div style={{ marginTop: "2rem" }}>
-          <h2>Your short link:</h2>
-          <p style={{ fontSize: "1.4rem", wordBreak: "break-all" }}>
-            <a
-              href={shortUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#0066ff" }}
-            >
-              {shortUrl}
-            </a>
-          </p>
-          <button
-            onClick={() => navigator.clipboard.writeText(shortUrl)}
-            style={{
-              padding: "0.75rem 1.5rem",
-              fontSize: "1rem",
-              cursor: loading ? "not-allowed" : "pointer",
-            }}
-          >
-            Copy to clipboard
-          </button>
-        </div>
-      )}
+  <div style={{ marginTop: "2rem" }}>
+    <h2>Your short link:</h2>
+    <p style={{ fontSize: "1.4rem", wordBreak: "break-all" }}>
+      <a
+        href={shortUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "#0066ff" }}
+      >
+        {shortUrl}
+      </a>
+    </p>
+    <button
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(shortUrl);
+          alert("Copied to clipboard! 😈"); // optional feedback
+        } catch (err) {
+          alert("Failed to copy. Please copy manually.");
+          console.error(err);
+        }
+      }}
+      style={{
+        padding: "0.75rem 1.5rem",
+        fontSize: "1rem",
+        cursor: "pointer",
+        backgroundColor: "#0066ff",
+        color: "white",
+        border: "none",
+        borderRadius: "4px",
+      }}
+    >
+      Copy to clipboard
+    </button>
+  </div>
+)}
     </div>
   );
 }
